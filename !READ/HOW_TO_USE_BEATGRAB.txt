@@ -1,0 +1,72 @@
+beatGrab — How to use
+=====================
+
+made by www.drumkits.site
+
+What it does
+------------
+Downloads BeatStars stream audio for an artist profile or a single beat.
+
+The on-site player loads audio as HLS (.m3u8 + split .ts segments under
+content.beatstars.com). This script instead uses BeatStars' stream API:
+
+  https://main.v2.beatstars.com/stream?id=<TRACK_ID>&return=audio
+
+which returns the full MP3/WAV in one file (no .ts stitching needed).
+
+Files are saved under:
+
+  _output/<artist-permalink>/
+
+
+Setup (once)
+------------
+  pip install -r requirements.txt
+
+
+Interactive mode
+----------------
+  python beatGrab.py
+
+Opens an intro banner (made by www.drumkits.site).
+
+First run only:
+
+  Continue? [Y/N]:
+
+Then enter an artist permalink OR a beat URL/id.
+
+For an artist catalog:
+
+  Download mode:
+    [1] All tracks
+    [2] Single track
+
+[2] prints a numbered preview, then asks which number to grab.
+
+
+CLI examples
+------------
+  python beatGrab.py lovbug
+  python beatGrab.py lovbug --all
+  python beatGrab.py lovbug -t 1
+  python beatGrab.py lovbug --all -j 16
+
+  python beatGrab.py https://www.beatstars.com/beat/clams-casino-x-kanye-west-type-beat-who-you-are-26015461
+  python beatGrab.py 26015461
+
+
+Options
+-------
+  -o, --output DIR   Output folder (default: _output)
+  --no-skip          Re-download even if the file already exists
+  --all              Download all artist tracks (skip mode menu)
+  -t, --track N      Download a single artist track by 1-based number
+  -j, --jobs N       Parallel download workers (default: 8)
+
+
+Notes
+-----
+- Artist listings come from BeatStars' public Algolia index.
+- Output extension is sniffed from the downloaded bytes (.mp3 / .wav / …).
+- Already-downloaded files are skipped unless you pass --no-skip.

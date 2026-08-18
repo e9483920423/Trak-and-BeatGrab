@@ -1,0 +1,88 @@
+trakGrab — How to use
+======================
+
+made by www.drumkits.site
+
+What it does
+------------
+Downloads the streamable MP3s from a Traktrain producer profile page
+(the same files the on-site player uses). Files are saved under:
+
+  _output/<artist-slug>/
+
+
+Setup (once)
+------------
+  pip install -r requirements.txt
+
+
+Interactive mode (recommended)
+------------------------------
+  python trakGrab.py
+
+Opens a short intro banner (made by www.drumkits.site).
+
+First run only — you will be asked:
+
+  Continue? [Y/N]:
+
+  Y  continue (writes .trakgrab_initialized next to the script)
+  N  exit
+
+Then you are prompted for the producer slug, the profile is fetched, and:
+
+  Download mode:
+    [1] All tracks
+    [2] Single track
+
+[1] downloads every track found for that producer.
+
+[2] prints a numbered interactive preview of all tracks the script sees,
+    then asks which number to download, e.g.:
+
+  Tracks on this profile (16):
+
+     1. [158 bpm] peter griffin
+     2. [154 bpm] alan walker
+     ...
+
+  Enter track number (1-16):
+
+
+CLI / any profile
+-----------------
+The argument is the producer slug from the profile URL:
+
+  https://traktrain.com/<slug>
+                         ^^^^^
+
+Passing an artist skips the intro / first-run screens and goes straight
+to fetch. If you do not pass --all or -t, you still get the mode menu
+when running in a terminal.
+
+Examples:
+
+  python trakGrab.py boolymon
+  python trakGrab.py https://traktrain.com/boolymon
+  python trakGrab.py boolymon --all
+  python trakGrab.py boolymon -t 3
+  python trakGrab.py boolymon --all -j 16
+
+
+Options
+-------
+  -o, --output DIR   Output folder (default: _output)
+  --no-skip          Re-download files even if they already exist
+  --all              Download all tracks (skip mode menu)
+  -t, --track N      Download a single track by 1-based list number
+  -j, --jobs N       Parallel download workers (default: 8)
+
+
+Notes
+-----
+- Only that producer's own tracks are saved (promoted ads/kits from
+  other accounts on the page are skipped).
+- Duplicate track titles get an id suffix, e.g. "m [1399427].mp3".
+- Already-downloaded files are skipped unless you pass --no-skip.
+- Very large profiles may only expose the tracks present in the first
+  page of HTML.
